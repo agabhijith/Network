@@ -1,0 +1,59 @@
+
+import java.net.*;
+import java.util.*;
+
+class UDPClient {
+    public static void main(String[] args) throws Exception {
+        DatagramSocket s = new DatagramSocket();
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter sentence: ");
+        byte[] b = sc.nextLine().getBytes();
+        InetAddress a = InetAddress.getByName("localhost");
+
+        s.send(new DatagramPacket(b, b.length, a, 12345));
+        b = new byte[4096];
+        DatagramPacket p = new DatagramPacket(b, b.length);
+        s.receive(p);
+
+        System.out.println(new String(p.getData(), 0, p.getLength()));
+        s.close();
+    }
+}
+
+javac UDPServer.java
+java UDPServer
+
+javac UDPClient.java
+java UDPClient
+
+
+import java.net.*;
+import java.util.*;
+
+class UDPServer {
+    public static void main(String[] args) throws Exception {
+        DatagramSocket s = new DatagramSocket(12345);
+        Map<String,String> m = new HashMap<>();
+        m.put("tbh","to be honest");
+        m.put("ig","I guess");
+        m.put("lol","laughing out loud");
+        m.put("omg","oh my god");
+        m.put("idk","I don't know");
+        m.put("asap","as soon as possible");
+
+        while (true) {
+            byte[] b = new byte[4096];
+            DatagramPacket p = new DatagramPacket(b,b.length);
+            s.receive(p);
+            String str = new String(p.getData(),0,p.getLength());
+            StringBuilder r = new StringBuilder();
+
+            for (String w : str.split(" "))
+                r.append(m.getOrDefault(w.toLowerCase(),w)).append(" ");
+
+            b = r.toString().trim().getBytes();
+            s.send(new DatagramPacket(b,b.length,p.getAddress(),p.getPort()));
+        }
+    }
+}
