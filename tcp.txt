@@ -1,0 +1,99 @@
+TCP Client Algorithm
+
+1. Start.
+2. Connect to the server using a TCP socket.
+3. Read the order \(n\) of the matrix.
+4. Generate a random \(n \times n\) matrix.
+5. Randomly make it an upper triangular, lower triangular, diagonal, or normal matrix.
+6. Display the generated matrix.
+7. Send the matrix order and matrix to the server.
+8. Receive and display the matrix type.
+9. Close the socket and stop.
+
+TCP Server Algorithm
+
+1. Start.
+2. Create a server socket on port 9002 and accept the client connection.
+3. Receive the matrix order and matrix from the client.
+4. Display the received matrix.
+5. Check whether the matrix is diagonal, upper triangular, or lower triangular by checking the zero elements.
+6. If none of these conditions is satisfied, classify it as a normal matrix.
+7. Send the matrix type to the client.
+8. Close the sockets and stop.
+
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+class TCPClient {
+    public static void main(String[] args) throws Exception {
+        Socket s = new Socket("localhost", 9002);
+        Scanner sc = new Scanner(System.in);
+        Random r = new Random();
+
+        System.out.print("Enter order: ");
+        int n = sc.nextInt(), a[][] = new int[n][n], t = r.nextInt(4);
+
+        for (int i=0;i<n;i++)
+            for (int j=0;j<n;j++)
+                a[i][j] = r.nextInt(50)+1;
+
+        for (int i=0;i<n;i++)
+            for (int j=0;j<n;j++)
+                if (t==0 && i>j || t==1 && i<j || t==2 && i!=j)
+                    a[i][j]=0;
+
+        for (int[] row:a) System.out.println(Arrays.toString(row));
+
+        ObjectOutputStream o = new ObjectOutputStream(s.getOutputStream());
+        o.writeInt(n);
+        o.writeObject(a);
+        o.flush();
+
+        System.out.println("Matrix Type: " +
+            new DataInputStream(s.getInputStream()).readUTF());
+        s.close();
+    }
+}
+
+
+
+
+import java.io.*;
+import java.net.*;
+
+class TCPServer {
+    public static void main(String[] args) throws Exception {
+        ServerSocket ss = new ServerSocket(9002);
+        Socket s = ss.accept();
+
+        ObjectInputStream in = new ObjectInputStream(s.getInputStream());
+        int n = in.readInt();
+        int[][] a = (int[][]) in.readObject();
+
+        for (int[] row:a) {
+            for (int x:row) System.out.print(x+" ");
+            System.out.println();
+        }
+
+        boolean u=true, l=true, d=true;
+
+        for (int i=0;i<n;i++)
+            for (int j=0;j<n;j++) {
+                if (i>j && a[i][j]!=0) u=false;
+                if (i<j && a[i][j]!=0) l=false;
+                if (i!=j && a[i][j]!=0) d=false;
+            }
+
+        String result = d ? "Diagonal Matrix" :
+            u ? "Upper Triangular Matrix" :
+            l ? "Lower Triangular Matrix" : "Normal Matrix";
+
+        System.out.println("Matrix Type: "+result);
+        new DataOutputStream(s.getOutputStream()).writeUTF(result);
+
+        s.close();
+        ss.close();
+    }
+}
