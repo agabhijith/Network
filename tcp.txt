@@ -1,9 +1,11 @@
 TCP Client Algorithm
 
+
+
 1. Start.
 2. Connect to the server using a TCP socket.
-3. Read the order \(n\) of the matrix.
-4. Generate a random \(n \times n\) matrix.
+3. Read the order n of the matrix.
+4. Generate a random n x n matrix.
 5. Randomly make it an upper triangular, lower triangular, diagonal, or normal matrix.
 6. Display the generated matrix.
 7. Send the matrix order and matrix to the server.
