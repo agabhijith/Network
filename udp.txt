@@ -1,3 +1,26 @@
+UDP Client Algorithm
+
+1. Start.
+2. Create a UDP socket and get the server address.
+3. Read a sentence from the user and convert it into bytes.
+4. Send the sentence to the server using a datagram packet.
+5. Receive the translated sentence from the server.
+6. Display the formal English sentence.
+7. Close the socket and stop.
+
+UDP Server Algorithm
+
+1. Start.
+2. Create a UDP socket on port 12345.
+3. Create a dictionary of abbreviations and their formal meanings.
+4. Receive the client's sentence.
+5. Split the sentence into words and replace known abbreviations with formal meanings.
+6. Preserve capitalization and punctuation.
+7. Send the translated sentence back to the client.
+8. Repeat the process continuously.
+
+
+
 
 import java.net.*;
 import java.util.*;
