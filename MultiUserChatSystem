@@ -1,0 +1,12 @@
+## Algorithm: Chat Server Using TCP
+
+1. Start.
+2. Create a server socket on port `5000`.
+3. Wait for clients to connect.
+4. Accept each client connection and create a separate thread to handle it.
+5. Receive the client's username and notify other clients.
+6. Continuously receive messages from the client.
+7. Broadcast each message to all other connected clients.
+8. When a client disconnects, remove it from the client list and notify the remaining clients.
+9. Close the client socket.
+10. Repeat the process for new clients.
