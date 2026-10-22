@@ -1,0 +1,20 @@
+### UDP Time Client Algorithm
+
+1. Start.
+2. Create a UDP socket.
+3. Send a time request to the server on port 5000.
+4. Receive the server's response.
+5. Convert the received data into a string.
+6. Display the server time.
+7. Close the socket and stop.
+
+### UDP Time Server Algorithm
+
+1. Start.
+2. Create a UDP socket on port 5000.
+3. Wait for a client request.
+4. Receive the request packet.
+5. Create a separate thread to handle the client.
+6. Get the current date and time.
+7. Send the time to the client's address and port.
+8. Repeat the process for new requests.
